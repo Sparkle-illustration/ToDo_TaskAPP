@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": [
+    "before 14:40 on monday"
+  ],
+  "timezone": "Asia/Yangon",
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      "description": "Group patch and minor updates",
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "groupName": "Non-major dependency updates",
+      "automerge": false
+    },
+    {
+      "description": "Keep major updates separate for manual review",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false
+    }
+  ]
+}
