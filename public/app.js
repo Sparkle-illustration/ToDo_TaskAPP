@@ -2,6 +2,7 @@ const API_BASE = '/api';
 const TICKET_CHARS = 4;
 const HEALTH_POLL_MS = 15000;
 const CONFIRM_DELETE_MS = 2500;
+const THEME_STORAGE_KEY = 'taskflow-theme';
 
 const els = {
   banner: document.getElementById('api-banner'),
@@ -10,6 +11,7 @@ const els = {
   dismiss: document.getElementById('api-dismiss'),
   status: document.getElementById('api-status'),
   statusLabel: document.getElementById('api-status-label'),
+  themeToggle: document.getElementById('theme-toggle'),
   boardMeta: document.getElementById('board-meta'),
   form: document.getElementById('new-task-form'),
   title: document.getElementById('new-title'),
@@ -87,6 +89,37 @@ function formatUptime(seconds) {
   const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
   const s = String(total % 60).padStart(2, '0');
   return `${h}:${m}:${s}`;
+}
+
+function currentTheme() {
+  return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+}
+
+function systemTheme() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function storedTheme() {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY);
+  } catch {
+    return null; // storage blocked - follow the system preference
+  }
+}
+
+function applyTheme(theme, { persist }) {
+  const dark = theme === 'dark';
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  els.themeToggle.setAttribute('aria-pressed', String(dark));
+  els.themeToggle.textContent = dark ? '☀ LIGHT' : '☾ DARK';
+  els.themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  if (persist) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // storage blocked - theme lasts for this visit only
+    }
+  }
 }
 
 function visibleTasks() {
@@ -518,5 +551,16 @@ els.filters.addEventListener('click', (event) => {
 els.retry.addEventListener('click', refreshAll);
 els.dismiss.addEventListener('click', hideBanner);
 
+els.themeToggle.addEventListener('click', () => {
+  applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', { persist: true });
+});
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!storedTheme()) {
+    applyTheme(systemTheme(), { persist: false });
+  }
+});
+
+applyTheme(storedTheme() || systemTheme(), { persist: false });
 refreshAll();
 window.setInterval(loadHealth, HEALTH_POLL_MS);
