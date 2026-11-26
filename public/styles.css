@@ -1,19 +1,50 @@
 :root {
+  color-scheme: light;
   --paper: #e8e9e3;
   --card: #f8f8f3;
   --card-raised: #fdfdf9;
   --ink: #1d2023;
   --ink-soft: #565b5e;
   --line: #26292c;
+  --line-faint: rgba(38, 41, 44, 0.4);
   --signal: #ffc400;
   --signal-deep: #e0ac00;
+  --ink-on-signal: #1d2023;
   --danger: #c6362c;
   --ok: #2e7d4f;
   --radius: 4px;
   --shadow-tag: 3px 3px 0 rgba(29, 32, 35, 0.14);
+  --shadow-hover: 2px 2px 0 rgba(29, 32, 35, 0.25);
+  --placeholder: #9a9f9d;
+  --error-bg: #f6e4e1;
+  --done-bg: #f1f1ea;
+  --done-ink: #82878a;
   --font-body: "Archivo", "Segoe UI", system-ui, sans-serif;
   --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #15171a;
+  --card: #1e2124;
+  --card-raised: #26292d;
+  --ink: #e9eae3;
+  --ink-soft: #9ba1a4;
+  --line: #4d5357;
+  --line-faint: rgba(233, 234, 227, 0.3);
+  --signal: #ffc400;
+  --signal-deep: #e0ac00;
+  --ink-on-signal: #15171a;
+  --danger: #e2564b;
+  --ok: #46a06f;
+  --radius: 4px;
+  --shadow-tag: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  --shadow-hover: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  --placeholder: #71777a;
+  --error-bg: #382521;
+  --done-bg: #222528;
+  --done-ink: #8b9194;
 }
 
 * {
@@ -86,6 +117,18 @@ body {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.masthead-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--line);
+  color: var(--signal);
 }
 
 .wordmark {
@@ -215,14 +258,14 @@ body {
 }
 
 .field-input::placeholder {
-  color: #9a9f9d;
+  color: var(--placeholder);
 }
 
 .form-error {
   margin: 0 0 12px;
   padding: 8px 12px;
   border-left: 4px solid var(--danger);
-  background: #f6e4e1;
+  background: var(--error-bg);
   color: var(--danger);
   font-size: 14px;
 }
@@ -248,7 +291,7 @@ body {
 
 .btn:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 2px 2px 0 rgba(29, 32, 35, 0.25);
+  box-shadow: var(--shadow-hover);
 }
 
 .btn:active {
@@ -270,7 +313,7 @@ body {
 }
 
 .btn-quiet {
-  border-color: rgba(38, 41, 44, 0.4);
+  border-color: var(--line-faint);
   background: transparent;
 }
 
@@ -362,7 +405,7 @@ body {
 }
 
 .tag-card.is-done {
-  background: #f1f1ea;
+  background: var(--done-bg);
 }
 
 .tag-head {
@@ -394,7 +437,7 @@ body {
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--ink-on-signal);
 }
 
 .ticket-no {
@@ -454,7 +497,7 @@ body {
 }
 
 .tag-card.is-done .task-description {
-  color: #82878a;
+  color: var(--done-ink);
 }
 
 .tag-foot {
@@ -464,7 +507,7 @@ body {
   gap: 10px;
   margin: 12px 0 0 44px;
   padding-top: 10px;
-  border-top: 1.5px dashed rgba(38, 41, 44, 0.35);
+  border-top: 1.5px dashed var(--line-faint);
 }
 
 .issued-at {

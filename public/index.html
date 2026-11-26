@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (() => {
+      try {
+        const stored = localStorage.getItem('taskflow-theme');
+        const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (dark) document.documentElement.dataset.theme = 'dark';
+      } catch {
+        // storage blocked - fall back to the light default
+      }
+    })();
+  </script>
   <title>TaskFlow — Work Order Board</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="description" content="TaskFlow task manager UI, served by the Express API as a single monolith." />
@@ -23,9 +34,13 @@
       <p class="eyebrow">Task management · monolith build · UI + API on one port</p>
       <div class="masthead-row">
         <h1 class="wordmark">TASK<span class="wordmark-accent">FLOW</span></h1>
-        <div class="api-status" id="api-status" data-state="unknown">
-          <span class="lamp" aria-hidden="true"></span>
-          <span class="api-status-label" id="api-status-label">CHECKING…</span>
+        <div class="masthead-tools">
+          <button id="theme-toggle" class="btn btn-mini theme-toggle" type="button"
+                  aria-pressed="false" aria-label="Switch to dark mode">☾ DARK</button>
+          <div class="api-status" id="api-status" data-state="unknown">
+            <span class="lamp" aria-hidden="true"></span>
+            <span class="api-status-label" id="api-status-label">CHECKING…</span>
+          </div>
         </div>
       </div>
       <p class="board-meta" id="board-meta">Connecting to the API…</p>
